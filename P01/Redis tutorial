@@ -1,0 +1,124 @@
+Critical Commands for Keys
+	EXISTS key
+	TYPE key
+	DEL key
+	KEYS pattern
+	SCAN pattern cursor
+examples:
+	127.0.0.1:6379> SET testkey hello
+	OK
+	127.0.0.1:6379> EXISTS testkey
+	(integer) 1
+	127.0.0.1:6379> TYPE testkey
+	string
+	127.0.0.1:6379> KEYS *
+	1) "testkey"
+	127.0.0.1:6379> DEL testkey
+	(integer) 1
+	127.0.0.1:6379> EXISTS testkey
+	(integer) 0
+	127.0.0.1:6379> TYPE testkey
+	none
+	127.0.0.1:6379> SCAN 0
+	1) "0"
+	2) 1) "testkey"
+	127.0.0.1:6379> SCAN 0 MATCH "hell*"
+	1) "0"
+	2) (empty list or set)
+Critical Commands for String
+	SET key string optional nx|xx
+	GET key
+	INCR key
+	INCRBY key integer
+	DECR key
+	DECRBY key integer
+	APPEND key string
+	MSET key1 string key2 string
+	MGET key1 key2 key3
+examples:
+	127.0.0.1:6379> SET Book:1 "Infinite Jest"
+	OK
+	127.0.0.1:6379> GET Book:1
+	"Infinite Jest"
+	127.0.0.1:6379> SET Book:1:ReadAction 1
+	OK
+	127.0.0.1:6379> GET Book:1:ReadAction
+	"1"
+	127.0.0.1:6379> INCR Book:1:ReadAction
+	(integer) 2
+	127.0.0.1:6379> GET Book:1:ReadAction
+	"2"
+	127.0.0.1:6379> INCRBY Book:1:ReadAction 20
+	(integer) 22
+	127.0.0.1:6379> GET Book:1:ReadAction
+	"22"
+	127.0.0.1:6379> DECR Book:1:ReadAction
+	(integer) 21
+	127.0.0.1:6379> GET Book:1:ReadAction
+	"21"
+	127.0.0.1:6379> DECRBY Book:1:ReadAction 5
+	(integer) 16
+	127.0.0.1:6379> GET Book:1:ReadAction
+	"16"
+	127.0.0.1:6379> INCR Book:1 "Infinite Jest"
+	127.0.0.1:6379> MSET Person:2 "Kurt Vonnegut" Person:3 "Jane Austen" Person:4 "Mark Twain"
+	OK
+	127.0.0.1:6379> MGET Person:2 Person:3 Person:4
+	1) "Kurt Vonnegut"
+	2) "Jane Austen"
+	3) "Mark Twain"
+Critical Commands for List
+	LPUSH key value
+	RPUSH key value
+	LRANGE key start end
+	LPOP key
+	RPOP key
+	LINDEX key index
+	LINSERT key BEFORE|AFTER pivot value
+	BLPOP key second delay
+	BRPOP key second delay
+examples:
+	127.0.0.1:6379> LPUSH Book:1:comment "This was a fun read"
+	(integer) 1
+	127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+	1) "This was a fun read"
+	127.0.0.1:6379> LPUSH Book:1:comment "Way too long!"
+	(integer) 2
+	127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+	1) "Way too long!"
+	2) "This was a fun read"
+	127.0.0.1:6379> RPUSH Book:1:comment "Tennis anyone?"
+	(integer) 3
+	127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+	1) "Way too long!"
+	2) "This was a fun read"
+	3) "Tennis anyone?"
+	127.0.0.1:6379> LPOP Book:1:comment
+	"Way too long!"
+	127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+	1) "This was a fun read"
+	2) "Tennis anyone?"
+	127.0.0.1:6379> RPOP Book:1:comment
+	"Tennis anyone?"
+	127.0.0.1:6379> LRANGE Book:1:comment 0 -1
+	1) "This was a fun read"
+	127.0.0.1:6379> RPUSH Organization:1:members Person:1 Person:2 Person:3 Person:4
+	(integer) 4
+	127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+	1) "Person:1"
+	2) "Person:2"
+	3) "Person:3"
+	4) "Person:4"
+	127.0.0.1:6379> LTRIM Organization:1:members 0 2
+	OK
+	127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+	1) "Person:1"
+	2) "Person:2"
+	3) "Person:3"
+	127.0.0.1:6379> BRPOP Organization:1:members 5
+	1) "Organization:1:members"
+	2) "Person:3"
+	127.0.0.1:6379> LRANGE Organization:1:members 0 -1
+	1) "Person:1"
+	2) "Person:2"
+     
