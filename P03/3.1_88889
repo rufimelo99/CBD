@@ -1,0 +1,164 @@
+"https://www.tutorialspoint.com/cassandra/cassandra_create_keyspace.htm"
+Keyspace
+Ex:
+CREATE KEYSPACE hola
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
+
+Replica placement strategy:
+	-simple strategy (rack-aware strategy);
+	-old network topology strategy (rack-aware strategy);
+	-network topology strategy (datacenter-shared strategy).
+
+A Cassandra column family has the following attributes −
+
+    keys_cached − It represents the number of locations to keep cached per SSTable.
+
+    rows_cached − It represents the number of rows whose entire contents will be cached in memory.
+
+    preload_row_cache − It specifies whether you want to pre-populate the row cache.
+
+$cqlsh
+cqlsh>
+
+cqlsh>CREATE KEYSPACE hola
+	  WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
+
+cqlsh>DESCRIBE keyspaces
+
+	system_schema  system_auth  system  system_distributed  system_traces  hola
+
+cqlsh> ALTER KEYSPACE hola WITH REPLICATION = {'class' : 'NetworkTopologyStrategy', 'datacenter1' : 3} AND DURABLE_WRITES = true;
+
+######
+Nao consigo ver valor de durable_writes:
+usando o comando: 
+	"SELECT * FROM system.schema_keyspaces;", 
+recebo o erro:
+	"InvalidRequest: Error from server: code=2200 [Invalid query] message="unconfigured table schema_keyspaces
+
+cqlsh>DROP KEYSPACE hola;
+cqlsh>DESCRIBE keyspaces
+
+	system_schema  system_auth  system  system_distributed  system_traces
+
+cqlsh>CREATE KEYSPACE hola WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
+
+cqlsh>USE hola;
+cqlsh:hola> CREATE TABLE emp(
+   emp_id int PRIMARY KEY,
+   emp_name text,
+   emp_city text,
+   emp_sal varint,
+   emp_phone varint
+   );
+
+cqlsh:hola>select * from emp;
+
+    emp_id | emp_city | emp_name | emp_phone | emp_sal
+   --------+----------+----------+-----------+---------
+
+   (0 rows)
+cqlsh:hola>ALTER TABLE emp ADD emp_email text;
+cqlsh:hola> select * from emp;
+
+ emp_id | emp_city | emp_email | emp_name | emp_phone | emp_sal
+--------+----------+-----------+----------+-----------+---------
+
+(0 rows)
+cqlsh:hola> ALTER TABLE emp DROP emp_email;
+cqlsh:hola> select * from emp;
+
+ emp_id | emp_city | emp_name | emp_phone | emp_sal
+--------+----------+----------+-----------+---------
+
+(0 rows)
+cqlsh:hola> DROP TABLE emp;
+cqlsh:hola> DESCRIBE COLUMNFAMILIES;
+
+<empty>
+
+##to empty a table, use truncate##
+##to create index: CREATE INDEX name ON emp1 (emp_name);#
+
+cqlsh:hola> BEGIN BATCH 
+			INSERT INTO emp (emp_id, emp_city, emp_name, emp_phone, emp_sal) values(  4,'Pune','rajeev',9848022331, 30000); 
+			UPDATE emp SET emp_sal = 50000 WHERE emp_id =3; 
+			DELETE emp_city FROM emp WHERE emp_id = 2; 
+			PPLY BATCH;
+cqlsh:hola> select * from emp;
+
+ emp_id | emp_city | emp_name | emp_phone  | emp_sal
+--------+----------+----------+------------+---------
+      4 |     Pune |   rajeev | 9848022331 |   30000
+      3 |     null |     null |       null |   50000
+
+(2 rows)
+cqlsh:hola> INSERT INTO emp (emp_id, emp_name, emp_city,
+        ... emp_phone, emp_sal) VALUES(3,'rahman', 'Chennai', 9848022330, 45000);
+
+cqlsh:hola> CREATE TABLE data(name text PRIMARY KEY, email list<text>);
+cqlsh:hola> INSERT INTO data(name, email) VALUES ('ramu',
+        ... ['abc@gmail.com','cba@yahoo.com'])
+        ... ;
+cqlsh:hola> select * from data;
+
+ name | email
+------+------------------------------------
+ ramu | ['abc@gmail.com', 'cba@yahoo.com']
+
+(1 rows)
+
+cqlsh:hola> UPDATE data SET email = email +['xyz@tutorialspoint.com'] where name = 'ramu';
+cqlsh:hola> select * from data;
+
+ name | email
+------+--------------------------------------------------------------
+ ramu | ['abc@gmail.com', 'cba@yahoo.com', 'xyz@tutorialspoint.com']
+
+(1 rows)
+cqlsh:hola> UPDATE data2 SET phone = phone + {9848022337} where name = 'rahman'; 
+cqlsh:hola> select * from data2 ;
+
+ name   | phone
+--------+--------------------------------------
+ rahman | {9848022337, 9848022338, 9848022339}
+
+(1 rows)
+cqlsh:hola> UPDATE data2 SET phone = phone + {9848022337} where name = 'rahman'; 
+cqlsh:hola> select * from data2 ;
+
+ name   | phone
+--------+--------------------------------------
+ rahman | {9848022337, 9848022338, 9848022339}
+
+(1 rows)
+cqlsh:hola> INSERT INTO data3 (name, address) VALUES ('robin, {'home':'casa', 'office': 'escritorio'});
+##nao resultou!!!!
+
+cqlsh:hola> DESCRIBE type card_details
+
+CREATE TYPE hola.card_details (
+    num int,
+    pin int,
+    name text,
+    cvv int,
+    phone set<int>
+);
+
+cqlsh:hola> ALTER TYPE card_details ADD email text;
+cqlsh:hola> DESCRIBE type card_details
+
+CREATE TYPE hola.card_details (
+    num int,
+    pin int,
+    name text,
+    cvv int,
+    phone set<int>,
+    email text
+);
+cqlsh:hola> drop type card_details;
+cqlsh:hola> DESCRIBE types; 
+
+<empty>
+
+cqlsh:hola> 

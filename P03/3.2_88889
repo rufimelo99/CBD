@@ -1,0 +1,227 @@
+################################################################################
+GUIAO
+3.2)
+a)1)
+
+cqlsh:cbd> CREATE TABLE user (username TEXT PRIMARY KEY, name Text, email Text, ts TIMESTAMP);
+cqlsh:cbd> INSERT INTO user (ts, name, username, email) VALUES (ToTimeStamp(now()), 'Joao', 'JP', 'jp@ua.pt');
+cqlsh:cbd> select * from user where username='JP';
+
+ username | email    | name | ts
+----------+----------+------+---------------------------------
+       JP | jp@ua.pt | Joao | 2019-11-17 00:49:23.710000+0000
+
+(1 rows)
+
+cqlsh:cbd> UPDATE user SET name = 'Joao Pedro' where username = 'JP';
+cqlsh:cbd> select * from user where username='JP';
+
+ username | email    | name       | ts
+----------+----------+------------+---------------------------------
+       JP | jp@ua.pt | Joao Pedro | 2019-11-17 00:49:23.710000+0000
+
+(1 rows)
+
+cqlsh:cbd> INSERT INTO user (ts, name, username, email) VALUES (ToTimeStamp(now()), 'MANUEL', 'MzN', 'mzn@ua.pt');
+
+
+a)2)
+cqlsh:cbd> CREATE TABLE videos (id UUID PRIMARY KEY, author TEXT, name Text, description Text, tags list<Text>, ts TIMESTAMP);
+cqlsh:cbd> INSERT INTO videos (ts, author, name, description, tags, id) VALUES (ToTimeStamp(now()), 'JP', 'DOGGOS!!', 'welp', ['#dog', '#fun'], uuid());
+cqlsh:cbd> select * from videos;
+
+ id                                   | author | description | name     | tags             | ts
+--------------------------------------+--------+-------------+----------+------------------+---------------------------------
+ 30c7da9c-c116-42cb-924d-d138fa3ceef9 |     JP |        welp | DOGGOS!! | ['#dog', '#fun'] | 2019-11-17 01:18:57.392000+0000
+
+(1 rows)
+
+
+a)3)
+
+cqlsh:cbd> CREATE TABLE comentarios (id UUID, author TEXT, content Text, video_id text, ts timestamp, primary key(id, ts) ) WITH CLUSTERING ORDER BY (ts DESC);
+
+
+cqlsh:cbd> INSERT INTO comentarios (ts, id, author, content, video_id) VALUES (ToTimeStamp(now()), uuid(), 'JP', 'me gusta', '30c7da9c-c116-42cb-924d-d138fa3ceef9');
+cqlsh:cbd> INSERT INTO comentarios (ts, id, author, content, video_id) VALUES (ToTimeStamp(now()), uuid(), 'MzN', 'hola hola', 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37');
+cqlsh:cbd> INSERT INTO comentarios (ts, id, author, content, video_id) VALUES (ToTimeStamp(now()), uuid(), 'JP', 'smh', '30c7da9c-c116-42cb-924d-d138fa3ceef9');
+cqlsh:cbd> INSERT INTO comentarios (ts, id, author, content, video_id) VALUES (ToTimeStamp(now()), uuid(), 'MzN', 'welp welp', '30c7da9c-c116-42cb-924d-d138fa3ceef9');
+cqlsh:cbd> select * from comentarios;
+
+id                                   | ts                              | author | content   | video_id
+--------------------------------------+---------------------------------+--------+-----------+--------------------------------------
+ e8a093d9-c546-4801-85b2-837ced648877 | 2019-11-17 18:07:52.153000+0000 |     JP |  me gusta | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+ e4f999bc-16ac-4b80-929d-f1664d50b3c0 | 2019-11-17 18:08:59.569000+0000 |    MzN | hola hola | e7bc07b3-c2fe-41b2-bd9f-77bba226db37
+ cc5a23a2-6bb9-4950-89c8-80854c6cb1e8 | 2019-11-17 18:11:15.770000+0000 |    MzN | welp welp | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+ 182d093b-1e1b-4fd1-a540-c476f32c75a5 | 2019-11-17 18:08:35.073000+0000 |     JP |       smh | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+
+(4 rows)
+
+
+
+
+a)4)
+cqlsh:cbd> CREATE TABLE video_followers (video_id TEXT PRIMARY KEY, followers_usernames set<TEXT>) ;
+
+cqlsh:cbd> INSERT INTO video_followers (video_id, followers_usernames) VALUES ('e7bc07b3-c2fe-41b2-bd9f-77bba226db37', {'JP'}) ;
+cqlsh:cbd> select * from video_followers  ;
+
+ video_id                             | followers_usernames
+--------------------------------------+---------------------
+ e7bc07b3-c2fe-41b2-bd9f-77bba226db37 |              {'JP'}
+
+(1 rows)
+cqlsh:cbd> UPDATE video_followers SET followers_usernames = followers_usernames +{'MzN'} where video_id = 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37';
+cqlsh:cbd> select * from video_followers  ;
+
+ video_id                             | followers_usernames
+--------------------------------------+---------------------
+ e7bc07b3-c2fe-41b2-bd9f-77bba226db37 |       {'JP', 'MzN'}
+
+(1 rows)
+
+
+a)5)
+
+cqlsh:cbd> CREATE TABLE video_event(video_user FROZEN<MAP<TEXT,TEXT>> PRIMARY KEY, ts TIMESTAMP, time_in_video TEXT, interaction TEXT);
+cqlsh:cbd> INSERT INTO video_event (video_user, ts, time_in_video, interaction) VALUES ({'e7bc07b3-c2fe-41b2-bd9f-77bba226db37':'JP'}, ToTimeStamp(now()), '300', 'stop');
+cqlsh:cbd> select * from video_event  ;
+
+ video_user                                     | interaction | time_in_video | ts
+------------------------------------------------+-------------+---------------+---------------------------------
+ {'e7bc07b3-c2fe-41b2-bd9f-77bba226db37': 'JP'} |        stop |           300 | 2019-11-17 16:38:38.485000+0000
+
+(1 rows)
+
+a)6)
+cqlsh:cbd> CREATE TABLE video_ratings (id uuid primary key, video text, rating int);
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37', 4);
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37', 2);
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37', 3);
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), 'e7bc07b3-c2fe-41b2-bd9f-77bba226db37', 3);
+cqlsh:cbd> select * from video_ratings ;
+
+ id                                   | rating | video
+--------------------------------------+--------+--------------------------------------
+ 05df8642-e533-4af6-8a4a-0a992326dba9 |      3 | e7bc07b3-c2fe-41b2-bd9f-77bba226db37
+ e6372947-b14a-4b27-903c-a7620ffa1ba7 |      2 | e7bc07b3-c2fe-41b2-bd9f-77bba226db37
+ 79d4b889-feac-4196-b19a-5ec680eaee74 |      4 | e7bc07b3-c2fe-41b2-bd9f-77bba226db37
+ 3f8605b9-7144-4389-9183-f51d8ab2cda3 |      3 | e7bc07b3-c2fe-41b2-bd9f-77bba226db37
+
+(4 rows)
+
+
+a)7)
+cqlsh:cbd> CREATE INDEX IF NOT EXISTS videos_indexfor_author ON videos (author);
+cqlsh:cbd> select * from videos where author='JP';
+
+ id                                   | author | description | name     | tags             | ts
+--------------------------------------+--------+-------------+----------+------------------+---------------------------------
+ 30c7da9c-c116-42cb-924d-d138fa3ceef9 |     JP |        welp | DOGGOS!! | ['#dog', '#fun'] | 2019-11-17 01:18:57.392000+0000
+
+(1 rows)
+
+a)8)
+cqlsh:cbd> CREATE INDEX IF NOT EXISTS comentarios_indexfor_author ON comentarios (author);
+cqlsh:cbd> select * from comentarios where author='JP';
+
+ id                                   | ts                              | author | content  | video_id
+--------------------------------------+---------------------------------+--------+----------+--------------------------------------
+ e8a093d9-c546-4801-85b2-837ced648877 | 2019-11-17 18:07:52.153000+0000 |     JP | me gusta | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+ 182d093b-1e1b-4fd1-a540-c476f32c75a5 | 2019-11-17 18:08:35.073000+0000 |     JP |      smh | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+
+(2 rows)
+
+Note: "WITH CLUSTERING ORDER BY (ts DESC)" added
+
+a)9)
+cqlsh:cbd> CREATE INDEX IF NOT EXISTS comentarios_indexfor_video_id ON comentarios (video_id);
+cqlsh:cbd> select * from comentarios where video_id='30c7da9c-c116-42cb-924d-d138fa3ceef9';
+
+ id                                   | ts                              | author | content   | video_id
+--------------------------------------+---------------------------------+--------+-----------+--------------------------------------
+ e8a093d9-c546-4801-85b2-837ced648877 | 2019-11-17 18:07:52.153000+0000 |     JP |  me gusta | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+ cc5a23a2-6bb9-4950-89c8-80854c6cb1e8 | 2019-11-17 18:11:15.770000+0000 |    MzN | welp welp | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+ 182d093b-1e1b-4fd1-a540-c476f32c75a5 | 2019-11-17 18:08:35.073000+0000 |     JP |       smh | 30c7da9c-c116-42cb-924d-d138fa3ceef9
+
+(3 rows)
+
+
+a)10)
+#Count
+cqlsh:cbd> CREATE INDEX IF NOT EXISTS rating_indexfor_video ON video_ratings (video);
+cqlsh:cbd> SELECT count(rating) FROM video_ratings WHERE video='e7bc07b3-c2fe-41b2-bd9f-77bba226db37';
+
+ system.count(rating)
+----------------------
+                    4
+
+(1 rows)
+
+Warnings :
+Aggregation query used without partition key
+
+#AVG
+cqlsh:cbd> SELECT avg(rating) FROM video_ratings WHERE video='e7bc07b3-c2fe-41b2-bd9f-77bba226db37';
+
+ system.avg(rating)
+--------------------
+                  3
+
+(1 rows)
+
+Warnings :
+Aggregation query used without partition key
+
+3.2)d)
+#1
+cqlsh:cbd>select * from comentarios where video_id='30c7da9c-c116-42cb-924d-d138fa3ceef9' limit 2;
+
+#2
+cqlsh:cbd>select tags from videos where id=30c7da9c-c116-42cb-924d-d138fa3ceef9;
+
+#3
+cqlsh:cbd> CREATE INDEX ON videos (tags);
+cqlsh:cbd> SELECT * FROM videos WHERE tags CONTAINS '#dog';
+
+#4
+#nao sera possivel porque video_event tem como primary key, id.. ou seja, para cada par video-utilizador so existira a ultima ação
+
+#5
+SELECT * FROM videos WHERE ts >= '2019-11-16 01:18:57+0000' AND  ts <= '2019-11-18 01:18:57+0000' AND author='JP';
+
+#nao sera possivel sem o allow filtering, uma vez que a primary key é "id" e nao podemos filtrar por dois indexes
+
+#6
+nao sera possivel ordernar uma vez que timestamp nao é inteiro para utilizar order BY
+
+#7  
+cqlsh:cbd> select followers_usernames from video_followers where video_id='e7bc07b3-c2fe-41b2-bd9f-77bba226db37';
+
+ followers_usernames
+---------------------
+       {'JP', 'MzN'}
+
+(1 rows)
+
+#8
+a informacao encontra-se em duas tabelas diferentes, pelo que penso, que aqui, uma vez que nao um modelo relacional, teria de criar uma tabela extra para este proposito
+
+#9
+INSERT INTO videos (ts, author, name, description, tags, id) VALUES (ToTimeStamp(now()), 'MzN', 'OI!!', '....', ['#fun'], uuid());
+INSERT INTO videos (ts, author, name, description, tags, id) VALUES (ToTimeStamp(now()), 'JP', 'SMH', '-.-', ['#wasted'], uuid());
+
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), '1e1f0d5b-26b0-4a7f-8064-984f47009b41', 5);
+cqlsh:cbd> INSERT INTO video_ratings (id, video, rating) VALUES (uuid(), '8f0c7424-ba6f-49c3-92e2-1eb5fd87fbab', 1);
+
+tries:
+cqlsh:cbd> SELECT id, avg(rating) as MEDIA FROM video_ratings;
+#nao resulta pois avg(rating) so vai funcionar no primeiro elemento da tabela e apenas retornar esse
+
+#10
+cqlsh:cbd> SELECT * from videos;
+#esta ordenado pelo timstamp pq foi a ordem em que foram inseridos na tabela
+
+#11
+?
+

@@ -1,0 +1,7 @@
+{
+    "video_id":"e7bc07b3-c2fe-41b2-bd9f-77bba226db37",
+    "followers_usernames":["JP","MzN"]
+}
+
+
+#["JP"] deveria ser um set, mas pelo que percebi, sets nao sao suportados em JSON
