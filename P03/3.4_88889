@@ -1,0 +1,467 @@
+cqlsh> CREATE KEYSPACE POKEMON_BASE WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
+
+
+#################################################
+TABLE POKEDEX
+
+CREATE TABLE POKEDEX (name TEXT, number INT, description TEXT, possible_moves SET<TEXT>, type SET<TEXT>, PRIMARY KEY(name, number)) WITH CLUSTERING ORDER BY (number ASC);
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Bulbasaur', 001, {'Grass', 'Poison'},
+'Bulbasaur is a small, quadruped Pokémon that has blue-green skin with darker patches. It has red eyes with white pupils, pointed, ear-like structures on top of its head, and a short, blunt snout with a wide mouth. A pair of small, pointed teeth are visible in the upper jaw when its mouth is open. Each of its thick legs ends with three sharp claws. On its back is a green plant bulb, which is grown from a seed planted there at birth. The bulb provides it with energy through photosynthesis as well as from the nutrient-rich seeds contained within.', 
+{'Tackle', 'Growl', 'Vine Whip', 'Leech Seed', 'Poison Powder', 'Sleep Powder', 'Take Down', 'Razor Leaf', 'Growth', 'Double-Edge'});
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Ivysaur', 002, {'Grass', 'Poison'},
+'Ivysaur is a quadruped Pokémon that has blue-green skin with darker patches. On top of its head are pointed ears with black insides and it has narrow red eyes. It has a short, rounded snout with a wide mouth and two pointed teeth in its upper jaw. Each of its feet has three claws on them. The bulb on its back has bloomed into a large pink bud. A short brown trunk surrounded by leafy green fronds supports the bud.   ', 
+{'Tackle', 'Growl', 'Vine Whip', 'Leech Seed', 'Poison Powder', 'Sleep Powder', 'Take Down', 'Razor Leaf', 'Growth', 'Double-Edge'});
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Venusaur', 003, {'Grass', 'Poison'},
+'Venusaur is a squat, quadruped Pokémon with bumpy, blue-green skin. It has small, circular red eyes, a short, blunt snout, and a wide mouth with two pointed teeth in the upper jaw and four in the lower jaw. On top of its head are small, pointed ears with reddish pink insides. It has three clawed toes on each foot. The bud on its back has bloomed in a large pink, white-spotted flower. The flower is supported by a thick, brown trunk surrounded by green fronds.', 
+{'Tackle', 'Growl', 'Vine Whip', 'Leech Seed', 'Poison Powder', 'Sleep Powder', 'Take Down', 'Razor Leaf', 'Growth', 'Double-Edge', 'Amnesia', 'Power Whip', 'Petal Dance', 'Solar Beam'});
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Charmander', 004, {'Fire'},
+'Charmeleon is a bipedal, reptilian Pokémon. It has dark red scales and a cream underside from the chest down. It has narrow, blue eyes and a long snout with a slightly hooked tip. ', 
+{'Scratch', 'Growl', 'Ember', 'Smokescreen', 'Dragon Breath', 'Fire Fang', 'Slash', 'Flamethrower', 'Scary Face', 'Fire Spin', 'Inferno', 'Flare Blitz' });
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Charmeleon', 005,  {'Fire'},
+'Charmander is a bipedal, reptilian Pokémon with a primarily orange body and blue eyes', 
+{'Scratch', 'Growl', 'Ember', 'Smokescreen', 'Dragon Breath', 'Fire Fang', 'Slash', 'Flamethrower', 'Scary Face', 'Fire Spin', 'Inferno', 'Flare Blitz' });
+
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Charizard', 006,  {'Fire', 'Flying'},
+'Charizard is a draconic, bipedal Pokémon. It is primarily orange with a cream underside from the chest to the tip of its tail. It has a long neck, small blue eyes, slightly raised nostrils, and two horn-like structures protruding from the back of its rectangular head. ', 
+{'Scratch', 'Growl', 'Ember', 'Smokescreen', 'Dragon Breath', 'Fire Fang', 'Slash', 'Flamethrower', 'Scary Face', 'Fire Spin', 'Inferno', 'Flare Blitz', 'Air Slash', 'Dragon Claw', 'Heat Wave', 'Air Slash'});
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Squirtle', 007,  {'Water'},
+'Squirtle is a small Pokémon that resembles a light blue turtle. ', 
+{'Tackle', 'Tail Whip', 'Bubble', 'Withdraw', 'Water Gun', 'Bite', 'Bubble Beam', 'Protect', 'Headbutt', 'Hydro Pump', 'Skull Bash'});
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Wartortle', 008, {'Water'},
+'Wartortle is a bipedal, indigo Pokémon similar to a turtle. ', 
+{'Tackle', 'Tail Whip', 'Bubble', 'Withdraw', 'Water Gun', 'Bite', 'Bubble Beam', 'Protect', 'Headbutt', 'Hydro Pump', 'Skull Bash'});
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Blastoise', 009, {'Water'},
+'Blastoise is a large, bipedal turtle-like Pokémon. Its body is blue and is mostly hidden by its tough, brown shell. ', 
+{'Tackle', 'Tail Whip', 'Bubble', 'Withdraw', 'Water Gun', 'Bite', 'Bubble Beam', 'Protect', 'Headbutt', 'Hydro Pump', 'Skull Bash', 'Flash Cannon', 'Fake Out', 'Aqua Jet'});
+
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Caterpie', 010, {'Bug'},
+'Caterpie is a Pokémon that resembles a green caterpillar with a yellow underside and teardrop-shaped tail. ', 
+{'Tackle', 'String Shot', 'Bug Bite'});
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Metapod', 011, {'Bug'},
+'Metapod is a Pokémon that resembles a green chrysalis.', 
+{'Harden'});
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Butterfree', 012, {'Bug', 'Flying'},
+'Butterfree resembles a vaguely anthropomorphic butterfly with a purple body. ', 
+{'Harden', 'Gust', 'Tackle', 'Bug Bite', 'Poison Powder', 'Sleep Powder', 'Air Slash', 'Quiver Dance'});
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Weedle', 013, {'Bug', 'Poison'},
+'Weedle is a larval Pokémon with a segmented body ranging in color from yellow to reddish-brown', 
+{'Poison Sting', 'Sting Shot'});
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Kakuna', 014, {'Bug', 'Poison'},
+'Kakuna is a yellow, cocoon-like Pokémon. Kakuna has a dome-shaped head and black, triangular eyes.', 
+{'Harden'});
+
+
+
+INSERT INTO POKEDEX(name, number, type, description, possible_moves) VALUES 
+('Beedrill', 015, {'Bug', 'Flying'},
+'Beedrill mostly resembles a bipedal, yellow wasp; however, it only has four legs instead of six and lacks pigment pits.', 
+{'Twineedle', 'Peck', 'Rage', 'Fury Attack', 'Focus Energy', 'Poison Jab', 'Agility', 'Pin Missile'});
+
+
+
+
+cqlsh:pokemon_base> select name, number, type from pokedex;
+
+ name       | number | type
+------------+--------+---------------------
+ Charmander |      4 |            {'Fire'}
+ Charmeleon |      5 |            {'Fire'}
+ Butterfree |     12 |   {'Bug', 'Flying'}
+  Charizard |      6 |  {'Fire', 'Flying'}
+     Kakuna |     14 |   {'Bug', 'Poison'}
+  Blastoise |      9 |           {'Water'}
+    Metapod |     11 |             {'Bug'}
+  Wartortle |      8 |           {'Water'}
+    Ivysaur |      2 | {'Grass', 'Poison'}
+   Venusaur |      3 | {'Grass', 'Poison'}
+     Weedle |     13 |   {'Bug', 'Poison'}
+  Bulbasaur |      1 | {'Grass', 'Poison'}
+   Caterpie |     10 |             {'Bug'}
+   Squirtle |      7 |           {'Water'}
+   Beedrill |     15 |   {'Bug', 'Flying'}
+
+(15 rows)
+
+
+
+#################################################
+TABLE POKEMON
+
+CREATE TABLE POKEMON (id UUID PRIMARY KEY, nome TEXT, number_pokedex INT, item TEXT, moves LIST<TEXT>, lvl INT ) ;
+
+INSERT INTO POKEMON (id, nome, number_pokedex, item, moves, lvl) VALUES 
+(
+  uuid(),
+  'BESTA',
+  3,
+  'Leftovers',
+  ['Vine Whip', 'Leech Seed', 'Poison Powder', 'Sleep Powder'],
+  43
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'First',
+  1,
+
+  ['Vine Whip', 'Tackle'],
+  7
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Charmander',
+  4,
+
+  ['Scratch', 'Growl', 'Ember'],
+  9
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Charizard',
+  6,
+
+  ['Air Slash', 'Earthquake', 'Flamethrower', 'Double-Edge'],
+  68
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Blastoise',
+  9,
+
+  ['Tackle', 'Skull Bash', 'Hydro Pump', 'Bubble Beam'],
+  63
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, item, moves, lvl) VALUES 
+(
+  uuid(),
+  '-.-',
+  11,
+  'Exp. Share',
+  ['Harden'],
+  11
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Look Out o.O',
+  12,
+
+  ['Bug Bite', 'Air Slash', 'Sleep Powder', 'Poison Powder'],
+  47
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Charmander',
+  4,
+
+  ['Scratch', 'Ember', 'Growl'],
+  12
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Squirtle',
+  7,
+
+  ['Tackle', 'Water Gun'],
+  12
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Squirtle',
+  7,
+
+  ['Tackle', 'Water Gun'],
+  12
+);
+
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'try',
+  10,
+
+  ['Tackle', 'String Shot'],
+  13
+);
+INSERT INTO POKEMON (id, nome, number_pokedex,item, moves, lvl) VALUES 
+(
+  uuid(),
+  'Catarpie',
+  10,
+  'Master Ball',
+  ['Tackle', 'String Shot', 'Bug Bite'],
+  15
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Charmeleon',
+  5,
+
+  ['Scratch', 'Ember', 'Flamethrower', 'Growl'],
+  19
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Wartortle',
+  8,
+
+  ['Tackle', 'Water Gun', 'Tail Whip'],
+  21
+);
+
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'hola',
+  15,
+
+  ['Peck', 'Poison Jab', 'Rage'],
+  31
+);
+
+
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'Beedrill',
+  15,
+
+  ['Peck', 'Poison Jab', 'Focus Energy', 'Rage'],
+  26
+);
+INSERT INTO POKEMON (id, nome, number_pokedex, moves, lvl) VALUES 
+(
+  uuid(),
+  'welp',
+  14,
+
+  ['Harden'],
+  11
+);
+
+
+cqlsh:pokemon_base> select * from pokemon;
+
+ id                                   | item        | lvl | moves                                                        | nome         | number_pokedex
+--------------------------------------+-------------+-----+--------------------------------------------------------------+--------------+----------------
+ b7f6265d-090c-469f-bde3-3f3621bdc902 |  Exp. Share |  11 |                                                   ['Harden'] |          -.- |             11
+ 3c58422d-0033-491f-99c6-a74d4815b87d |        null |  12 |                                      ['Tackle', 'Water Gun'] |     Squirtle |              7
+ b61194d2-a8a3-4b10-bc00-f04250b3e653 | Master Ball |  15 |                        ['Tackle', 'String Shot', 'Bug Bite'] |     Catarpie |             10
+ da39224a-9d74-4d94-889b-83875f33dc2c |        null |  26 |               ['Peck', 'Poison Jab', 'Focus Energy', 'Rage'] |     Beedrill |             15
+ c8c89d88-246d-427a-8d5c-494148098a26 |   Leftovers |  43 | ['Vine Whip', 'Leech Seed', 'Poison Powder', 'Sleep Powder'] |        BESTA |              3
+ 261c9ce2-7108-4982-b5da-6bd254cba3dc |        null |  21 |                         ['Tackle', 'Water Gun', 'Tail Whip'] |    Wartortle |              8
+ 451c7161-b987-41be-84a2-c64b7aaa6311 |        null |  12 |                                ['Scratch', 'Ember', 'Growl'] |   Charmander |              4
+ fbedb192-41dc-4229-8956-4678e37b8c05 |        null |  13 |                                    ['Tackle', 'String Shot'] |          try |             10
+ 78b973a2-5c79-4fb9-9eff-2e85820bc967 |        null |  11 |                                                   ['Harden'] |         welp |             14
+ 2472d81d-db7f-4e25-af13-929df5bc429f |        null |  63 |        ['Tackle', 'Skull Bash', 'Hydro Pump', 'Bubble Beam'] |    Blastoise |              9
+ f97732c3-5bfe-4863-911f-e186282098a3 |        null |  19 |                ['Scratch', 'Ember', 'Flamethrower', 'Growl'] |   Charmeleon |              5
+ 6096ce85-5ff9-406e-b2d6-41fda616fea8 |        null |  31 |                               ['Peck', 'Poison Jab', 'Rage'] |         hola |             15
+ cdd721d6-cbf6-42ad-a8be-57bbe44b116d |        null |  12 |                                      ['Tackle', 'Water Gun'] |     Squirtle |              7
+ ce4d4fe7-4660-4003-a504-db447f612d36 |        null |  47 |   ['Bug Bite', 'Air Slash', 'Sleep Powder', 'Poison Powder'] | Look Out o.O |             12
+ 182a3f14-f170-450a-bfe1-2f9031c7ee29 |        null |   9 |                                ['Scratch', 'Growl', 'Ember'] |   Charmander |              4
+ f5294679-b790-4309-be49-b70b036a2795 |        null |  68 |   ['Air Slash', 'Earthquake', 'Flamethrower', 'Double-Edge'] |    Charizard |              6
+ 8415b04a-6d23-42e9-8465-5b3ef446fe2e |        null |   7 |                                      ['Vine Whip', 'Tackle'] |        First |              1
+
+(17 rows)
+
+#################################################
+TABLE PERSONAL_BOX
+
+CREATE TABLE PERSONAL_BOX(box_number int, pokemons FROZEN<MAP<UUID,TEXT>> PRIMARY KEY);
+
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {3c58422d-0033-491f-99c6-a74d4815b87d:'Squirtle'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  2,
+  {182a3f14-f170-450a-bfe1-2f9031c7ee29:'Charmander'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {8415b04a-6d23-42e9-8465-5b3ef446fe2e:'First'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {cdd721d6-cbf6-42ad-a8be-57bbe44b116d:'Squirtle'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  2,
+  {f97732c3-5bfe-4863-911f-e186282098a3:'Charmeleon'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  2,
+  {fbedb192-41dc-4229-8956-4678e37b8c05:'try'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {451c7161-b987-41be-84a2-c64b7aaa6311:'Charmander'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {261c9ce2-7108-4982-b5da-6bd254cba3dc:'Wartortle'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {b61194d2-a8a3-4b10-bc00-f04250b3e653:'Catarpie'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  {da39224a-9d74-4d94-889b-83875f33dc2c:'Beedrill'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  2,
+  {78b973a2-5c79-4fb9-9eff-2e85820bc967:'welp'}
+);
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  3,
+  {6096ce85-5ff9-406e-b2d6-41fda616fea8:'hola'}
+);
+
+
+
+#################################################
+TABLE PARTY
+
+
+CREATE TABLE PARTY (pokemon FROZEN<MAP<UUID,TEXT>> PRIMARY KEY, health INT, item TEXT, lvl INT);
+
+INSERT INTO PARTY (pokemon, health, item, lvl) VALUES
+(
+  {c8c89d88-246d-427a-8d5c-494148098a26:'BESTA'},
+  187,
+  'Leftovers',
+  43
+);
+INSERT INTO PARTY (pokemon, lvl) VALUES
+(
+  {2472d81d-db7f-4e25-af13-929df5bc429f:'Blastoise'},
+
+  63
+);
+INSERT INTO PARTY (pokemon, health, item, lvl) VALUES
+(
+  {b7f6265d-090c-469f-bde3-3f3621bdc902:'-.-'},
+  16,
+  'Exp. Share',
+  11
+);
+INSERT INTO PARTY (pokemon, health, lvl) VALUES
+(
+  {ce4d4fe7-4660-4003-a504-db447f612d36:'Look Out o.O'},
+  167,
+  47
+);
+INSERT INTO PARTY (pokemon, health, lvl) VALUES
+(
+  {f5294679-b790-4309-be49-b70b036a2795:'Charizard'},
+  201,
+  68
+);
+
+cqlsh:pokemon_base> select * from party;
+
+ pokemon                                                | health | item       | lvl
+--------------------------------------------------------+--------+------------+-----
+          {b7f6265d-090c-469f-bde3-3f3621bdc902: '-.-'} |     16 | Exp. Share |  11
+    {2472d81d-db7f-4e25-af13-929df5bc429f: 'Blastoise'} |   null |       null |  63
+        {c8c89d88-246d-427a-8d5c-494148098a26: 'BESTA'} |    187 |  Leftovers |  43
+ {ce4d4fe7-4660-4003-a504-db447f612d36: 'Look Out o.O'} |    167 |       null |  47
+    {f5294679-b790-4309-be49-b70b036a2795: 'Charizard'} |    201 |       null |  68
+
+(5 rows)
+
+
+CREATE INDEX IF NOT EXISTS pokedex_indexfor_type ON pokedex (type);
+CREATE INDEX IF NOT EXISTS pokemon_indexfor_lvl ON pokemon (lvl);
+
+#caso pokemon x aumentou de nivel:
+deveria usar um counter, mas obrigaria a criar uma nova tabela, uma vez que nao posso misturar counters com non counters
+
+alternativa supondo que teria um metodo para calcular o novo valor do lvl
+UPDATE party SET lvl = 12 where pokemon CONTAINS KEY b7f6265d-090c-469f-bde3-3f3621bdc902;
+cqlsh:pokemon_base> UPDATE party SET lvl = 12 where pokemon CONTAINS KEY b7f6265d-090c-469f-bde3-3f3621bdc902;
+ServerError: java.lang.UnsupportedOperationException
+?
+--ERRO--
+
+                      +
+
+UPDATE pokemon SET lvl = 12 where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
+
+#caso item seja retirado de pokemon x
+DELETE item from party where pokemon COUNTAINS KEY b7f6265d-090c-469f-bde3-3f3621bdc902;
+??
+DELETE item from pokemon where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
+??
+
+
+#colocar item:
+Update party SET item='Lens' where pokemon CONTAINS KEY b7f6265d-090c-469f-bde3-3f3621bdc902;
+???
+
+Update pokemon SET item='Lens' where id= b7f6265d-090c-469f-bde3-3f3621bdc902;

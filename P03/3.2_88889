@@ -205,7 +205,7 @@ cqlsh:cbd> select followers_usernames from video_followers where video_id='e7bc0
 (1 rows)
 
 #8
-a informacao encontra-se em duas tabelas diferentes, pelo que penso, que aqui, uma vez que nao um modelo relacional, teria de criar uma tabela extra para este proposito
+a informacao encontra-se em duas tabelas diferentes, pelo que penso que aqui, uma vez que nao é um modelo relacional, teria de criar uma tabela extra para este proposito
 
 #9
 INSERT INTO videos (ts, author, name, description, tags, id) VALUES (ToTimeStamp(now()), 'MzN', 'OI!!', '....', ['#fun'], uuid());
