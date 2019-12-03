@@ -1,0 +1,167 @@
+cqlsh> CREATE KEYSPACE POKEMON_BASE WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
+
+https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_National_Pok%C3%A9dex_number
+#################################################
+TABLE POKEDEX
+
+CREATE TABLE POKEDEX (name TEXT, Kanto_number INT, National_number INT, description TEXT, possible_moves SET<FROZEN<MAP<TEXT, INT>>>, type SET<TEXT>, base_stats LIST<INT>, PRIMARY KEY(name, Kanto_number)) WITH CLUSTERING ORDER BY (Kanto_number ASC);
+
+
+INSERT INTO POKEDEX(name, Kanto_number, National_number, type, description, possible_moves, base_stats) VALUES 
+('Bulbasaur', 001, 001, {'Grass', 'Poison'},
+'Bulbasaur is a small, quadruped Pokémon that has blue-green skin with darker patches. It has red eyes with white pupils, pointed, ear-like structures on top of its head, and a short, blunt snout with a wide mouth. A pair of small, pointed teeth are visible in the upper jaw when its mouth is open. Each of its thick legs ends with three sharp claws. On its back is a green plant bulb, which is grown from a seed planted there at birth. The bulb provides it with energy through photosynthesis as well as from the nutrient-rich seeds contained within.', 
+{{'Tackle':1}, {'Growl':1}, {'Vine Whip':5}, {'Leech Seed':9}, {'Poison Powder':14}, {'Sleep Powder':14}, {'Take Down':18}, {'Razor Leaf':23}, {'Growth':27}, {'Double-Edge':32}},
+[45, 49, 49, 65, 65, 45]);
+
+
+INSERT INTO POKEDEX(name, Kanto_number, National_number, type, description, possible_moves, base_stats) VALUES 
+('Ivysaur', 002, 002, {'Grass'},
+'Ivysaur is a quadruped Pokémon that has blue-green skin with darker patches. On top of its head are pointed ears with black insides and it has narrow red eyes. ', 
+{{'Tackle':1}, {'Growl':1}, {'Vine Whip':5}, {'Leech Seed':9}, {'Poison Powder':14}, {'Sleep Powder':14}, {'Take Down':18}, {'Razor Leaf':23}, {'Growth':27}, {'Double-Edge':32}, {'Solar Beam':56}},
+[60, 62,63, 80,80, 60]);
+
+
+#################################################
+TABLE POKEMON
+p.s. could be added nature for instance
+
+CREATE TABLE POKEMON (id UUID , name TEXT, number_Kanto_pokedex INT, item TEXT, moves LIST<TEXT>, lvl INT, IV FROZEN<LIST<INT>>, EV LIST<INT>, nature TEXT, ts TIMESTAMP, PRIMARY KEY(id, lvl)) WITH CLUSTERING ORDER BY (lvl ASC);
+
+
+INSERT INTO POKEMON (id, name, number_Kanto_pokedex, item, moves, lvl, IV, nature, ts) VALUES 
+(
+  uuid(),
+  '#1',
+  1,  
+  'Leftovers',
+  ['Tackle', 'Leech Seed', 'Poison Powder', 'Sleep Powder'],
+  15,
+  [11,6,7,1,11,13],
+  'Modest',
+  ToTimeStamp(now())
+);
+INSERT INTO POKEMON(id, name, number_Kanto_pokedex, moves, lvl, IV, nature, ts)VALUES 
+(
+  uuid(),
+  'Bulbasaur',
+  1,
+  ['Tackle', 'Leech Seed'],
+  12,
+  [11,16,2,8,1,7],
+  'Brave',
+  ToTimeStamp(now())
+);
+
+
+#################################################
+TABLE PERSONAL_BOX
+
+CREATE TABLE PERSONAL_BOX(box_number int, pokemons UUID PRIMARY KEY);
+
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
+  1,
+  aee70c68-6933-4039-9939-4c580958770b
+);
+
+
+
+#################################################
+TABLE PARTY
+
+
+CREATE TABLE PARTY (pokemon UUID PRIMARY KEY, number_Kanto_pokedex INT, name TEXT, health INT, item TEXT, lvl INT, IV LIST<INT>, EV LIST<INT>);
+
+INSERT INTO PARTY (pokemon, number_Kanto_pokedex, name , health , item , lvl , IV   ) VALUES
+(
+   55e66772-c9b2-48c0-aa8c-d9e5554f8caa ,
+  1,
+  '#1',
+  45,
+  'Leftovers',  
+  15,
+  [11,6,7,1,3,4]
+);
+
+
+#meter em java
+UPDATE PARTY SET level =x where id=y
+
+
+
+cqlsh:pokemon_base> select name, number_Kanto_pokedex, health, item, lvl from party;
+
+ name | number_kanto_pokedex | health | item      | lvl
+------+----------------------+--------+-----------+-----
+   #1 |                    1 |     45 | Leftovers |  15
+
+(1 rows)
+
+###############################################
+
+CREATE INDEX IF NOT EXISTS pokedex_indexfor_type ON pokedex (type);
+CREATE INDEX IF NOT EXISTS pokemon_indexfor_lvl ON pokemon (lvl);
+
+CREATE INDEX IF NOT EXISTS pokemon_indexfor_moves ON pokemon (moves);
+
+#######################
+UPDATES/DELETES   
+#Change name
+UPDATE party SET name='##1' WHERE pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
+UPDATE pokemon SET name='##1' where id=6e815173-5af4-430e-8e66-94d182fc35ad;
+
+#Eliminar pokemon (libertar no jogo)
+DELETE from pokemon where id=596bff19-b574-4dce-8af2-fa943373ca20;
+DELETE from PERSONAL_BOX where pokemons=596bff19-b574-4dce-8af2-fa943373ca20;
+
+#delete item (remove item)
+DELETE item from pokemon where id=6e815173-5af4-430e-8e66-94d182fc35ad;
+DELETE item from party where pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
+
+#Change lvl
+UPDATE party SET lvl=18 WHERE pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
+UPDATE pokemon SET lvl=18 where id=6e815173-5af4-430e-8e66-94d182fc35ad;
+
+#Add type in pokedex                                                                                          --done--
+UPDATE pokedex SET type=type+{'Poison'} where Kanto_number=2 and name='Ivysaur';
+UPDATE pokedex SET type=type-{'Poison'} where Kanto_number=2 and name='Ivysaur';
+
+#Update move in pokemon                                                                                       --done--
+UPDATE pokemon SET moves=['Struggle'] where id=0c668bba-e9b9-4837-bd2e-d27d425c2ede  and lvl =15;
+
+UPDATE pokemon SET moves+=['Leer'] where id=1e2bf9dc-0818-4fff-9be9-9fc7c40ae9c2 and lvl =12;
+
+
+#UPDATE base_stats in pokedex                                                                                 --done--
+Update pokedex SET base_stats=[60, 63,63, 80,80, 60] where name='Ivysaur' and Kanto_number=2;  
+
+
+#DELETE POKEMON                                                                                               --done--
+DELETE FROM pokemon WHERE moves CONTAINS 'Struggle';
+
+#caso item seja retirado de pokemon x
+DELETE item from party where id=b7f6265d-090c-469f-bde3-3f3621bdc902;
+DELETE item from pokemon where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
+
+
+
+?? DELETES
+
+
+
+
+############
+QUERIES
+#caso pokemon x aumentou de nivel:
+deveria usar um counter, mas obrigaria a criar uma nova tabela, uma vez que nao posso misturar counters com non counters
+
+
+#colocar item:
+Update party SET item='Lens' where id=f6265d-090c-469f-bde3-3f3621bdc902;
+Update pokemon SET item='Lens' where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
+
+
+#RETORNAR OS MELHORES 3 (LVL) POKEMONS QUE ESTAO DISPONIVEIS
+select id, lvl from pokemon limit 1; 
+
+#
