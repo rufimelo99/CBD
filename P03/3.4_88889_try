@@ -1,524 +1,167 @@
-########################################################################################################################################################
-CREATE KEYSPACE music_store WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '1'};
+cqlsh> CREATE KEYSPACE POKEMON_BASE WITH replication = {'class': 'SimpleStrategy', 'replication_factor' : '3'};
 
-CREATE TABLE Guitarra (fabricante TEXT, modelo TEXT, trastes INT, cores_disponiveis SET<TEXT>, tipo_cordas TEXT, tipo TEXT, 
-                                  PRIMARY KEY(fabricante, modelo));
+https://bulbapedia.bulbagarden.net/wiki/List_of_Pok%C3%A9mon_by_National_Pok%C3%A9dex_number
+#################################################
+TABLE POKEDEX
 
-
-
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Fender',
-  'Player Strat MN 3TS',
-  22,
-  {'3-Tone Sunburst'},
-  'Aco',
-  'Eletrica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Fender',
-  'FA-115',
-  20,
-  {'Natural'},
-  'Nylon',
-  'Classica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Gear4music',
-  'Junior',
-  22,
-  {'Natural'},
-  'Nylon',
-  'Classica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Jackson',
-  'Dinky Arch Top JS22',
-  24,
-  {'Natural'},
-  'Aco',
-  'Eletrica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Gear4music',
-  'Roundback',
-  22,
-  {'Natural'},
-  'Aco',
-  'Electro-Acustica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Fender',
-  'Player Stratocaster PF',
-  20,
-  {'4-Tone Sunburst'},
-  'Aco',
-  'Eletrica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Yamaha',
-  'C40',
-  22,
-  {'Castanha'},
-  'Nylon',
-  'Classica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Gear4music',
-  'Classic V1',
-  24,
-  {'Preto'},
-  'Aco',
-  'Classica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Yamaha',
-  'F310',
-  22,
-  {'Pinho'},
-  'Nylon',
-  'Classica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'LA',
-  'B3R',
-  24,
-  {'Sunburst'},
-  'Aco',
-  'Eletrica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'BONTEMPI',
-  '24 1310',
-  22,
-  {'Preto'},
-  'Aco',
-  'Eletrica'
-);
-INSERT INTO Guitarra (fabricante, modelo, trastes, cores_disponiveis, tipo_cordas, tipo) VALUES 
-(
-  'Yamaha',
-  'LS-TA',
-  24,
-  {'Castanha'},
-  'Nylon',
-  'Electro-Acustica'
-);
+CREATE TABLE POKEDEX (name TEXT, Kanto_number INT, National_number INT, description TEXT, possible_moves SET<FROZEN<MAP<TEXT, INT>>>, type SET<TEXT>, base_stats LIST<INT>, PRIMARY KEY(name, Kanto_number)) WITH CLUSTERING ORDER BY (Kanto_number ASC);
 
 
-CREATE TABLE teclados (fabricante TEXT, modelo TEXT, cores_disponiveis SET<TEXT>, Tipo TEXT, Teclas INT, PRIMARY KEY(fabricante, modelo));
+INSERT INTO POKEDEX(name, Kanto_number, National_number, type, description, possible_moves, base_stats) VALUES 
+('Bulbasaur', 001, 001, {'Grass', 'Poison'},
+'Bulbasaur is a small, quadruped Pokémon that has blue-green skin with darker patches. It has red eyes with white pupils, pointed, ear-like structures on top of its head, and a short, blunt snout with a wide mouth. A pair of small, pointed teeth are visible in the upper jaw when its mouth is open. Each of its thick legs ends with three sharp claws. On its back is a green plant bulb, which is grown from a seed planted there at birth. The bulb provides it with energy through photosynthesis as well as from the nutrient-rich seeds contained within.', 
+{{'Tackle':1}, {'Growl':1}, {'Vine Whip':5}, {'Leech Seed':9}, {'Poison Powder':14}, {'Sleep Powder':14}, {'Take Down':18}, {'Razor Leaf':23}, {'Growth':27}, {'Double-Edge':32}},
+[45, 49, 49, 65, 65, 45]);
 
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Casio',
-  'CTK-1550',
-  {'Preto', 'Branco'},
-  'Digital',
-  61
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Yamaha',
-  'PSR-SX700',
-  {'Preto'},
-  'Digital',
-  61
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Roland',
-  'Go Keys',
-  {'Preto'},
-  'Digital',
-  73
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Yamaha',
-  'P-121 BK',
-  {'Preto'},
-  'Digital',
-  73
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Casio',
-  'LK-265',
-  {'Preto'},
-  'Digital',
-  61
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Korg',
-  'EK-50',
-  {'Cinzento'},
-  'Digital',
-  73
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Kawai',
-  'K-200 ATX 3',
-  {'Cinzento'},
-  'Acustico',
-  88
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Kawai',
-  'K 15',
-  {'Cinzento'},
-  'Acustico',
-  88
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Kawai',
-  'K 15',
-  {'Cinzento'},
-  'Acustico',
-  88
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Kawai',
-  'GL 10 WH',
-  {'Cinzento'},
-  'Acustico',
-  88
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Viscount',
-  'Vivace 40 Laminat',
-  {'Pinho'},
-  'Orgao',
-  88
-);
-INSERT INTO teclados (fabricante, modelo, cores_disponiveis, Tipo, teclas) VALUES (
-  'Ahlborn',
-  'Praeludium I',
-  {'Pinho', 'Preto'},
-  'Orgao',
-  111
-);
 
-CREATE TABLE Encomendas (encomenda_id INT, instrumento TEXT, modelo MAP<TEXT,TEXT>, cor Text, Notas MAP<INT, TEXT>, Data TIMESTAMP ,PRIMARY KEY(encomenda_id, Data))
-                                            WITH CLUSTERING ORDER BY (Data DESC);
+INSERT INTO POKEDEX(name, Kanto_number, National_number, type, description, possible_moves, base_stats) VALUES 
+('Ivysaur', 002, 002, {'Grass'},
+'Ivysaur is a quadruped Pokémon that has blue-green skin with darker patches. On top of its head are pointed ears with black insides and it has narrow red eyes. ', 
+{{'Tackle':1}, {'Growl':1}, {'Vine Whip':5}, {'Leech Seed':9}, {'Poison Powder':14}, {'Sleep Powder':14}, {'Take Down':18}, {'Razor Leaf':23}, {'Growth':27}, {'Double-Edge':32}, {'Solar Beam':56}},
+[60, 62,63, 80,80, 60]);
 
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
+
+#################################################
+TABLE POKEMON
+p.s. could be added nature for instance
+
+CREATE TABLE POKEMON (id UUID , name TEXT, number_Kanto_pokedex INT, item TEXT, moves LIST<TEXT>, lvl INT, IV FROZEN<LIST<INT>>, EV LIST<INT>, nature TEXT, ts TIMESTAMP, PRIMARY KEY(id, lvl)) WITH CLUSTERING ORDER BY (lvl ASC);
+
+
+INSERT INTO POKEMON (id, name, number_Kanto_pokedex, item, moves, lvl, IV, nature, ts) VALUES 
+(
+  uuid(),
+  '#1',
+  1,  
+  'Leftovers',
+  ['Tackle', 'Leech Seed', 'Poison Powder', 'Sleep Powder'],
+  15,
+  [11,6,7,1,11,13],
+  'Modest',
+  ToTimeStamp(now())
+);
+INSERT INTO POKEMON(id, name, number_Kanto_pokedex, moves, lvl, IV, nature, ts)VALUES 
+(
+  uuid(),
+  'Bulbasaur',
   1,
-  'teclado',
-  {'Ahlborn':'Praeludium I'},
-  'Pinho',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  2,
-  'teclado',
-  {'Ahlborn':'Praeludium I'},
-  'Preto',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  3,
-  'teclado',
-  {'Kawai':'K-200 ATX 3'},
-  'Cinzento',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  4,
-  'teclado',
-  {'Roland':'Go Keys'},
-  'Preto',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  5,
-  'teclado',
-  {'Casio':'CTK-1550'},
-  'Preto',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  6,
-  'teclado',
-  {'Kawai':'K 15'},
-  'Cinzento',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  7,
-  'guitarra',
-  {'Fender':'K 15'},
-  '3-Tone Sunburst',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  8,
-  'guitarra',
-  {'Gear4music':'Junior'},
-  'Natural',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  9,
-  'guitarra',
-  {'Gear4music':'Roundback'},
-  'Natural',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  10,
-  'guitarra',
-  {'Yamaha':'C40'},
-  'Natural',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
-  11,
-  'guitarra',
-  {'Yamaha':'F310'},
-  'Pinho',
-  ToTimeStamp(now())
-);
-INSERT INTO Encomendas (encomenda_id, instrumento, modelo, cor, Data) VALUES (
+  ['Tackle', 'Leech Seed'],
   12,
-  'guitarra',
-  {'BONTEMPI':'24 1310'},
-  'Preto',
+  [11,16,2,8,1,7],
+  'Brave',
   ToTimeStamp(now())
 );
 
 
+#################################################
+TABLE PERSONAL_BOX
 
-CREATE TABLE artigos (artigo INT, instrumento TEXT, modelo MAP<TEXT,TEXT>, Preco DOUBLE, Notas List<TEXT>,PRIMARY KEY(artigo));
+CREATE TABLE PERSONAL_BOX(box_number int, pokemons UUID PRIMARY KEY);
 
-
-
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  2,
-  'Guitarra',
-  {'Fender':'FA-115'},
-  559.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco, Notas) VALUES (
+INSERT INTO PERSONAL_BOX(box_number, pokemons) VALUES
+(
   1,
-  'Guitarra',
-  {'Fender':'FA-115'},
-  359.99,
-  ['Alguns riscos']
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  3,
-  'Guitarra',
-  {'Gear4music':'Junior'},
-  34.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  4,
-  'Guitarra',
-  {'Fender':'Player Stratocaster PF'},
-  214.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  5,
-  'Guitarra',
-  {'Fender':'Player Stratocaster PF'},
-  214.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  6,
-  'Guitarra',
-  {'Yamaha':'F310'},
-  114.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  7,
-  'Teclados',
-  {'Korg':'EK-50'},
-  179.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  8,
-  'Teclados',
-  {'Kawai':'K-200 ATX 3'},
-  379.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  9,
-  'Teclados',
-  {'Viscount':'Vivace 40 Laminat'},
-  3279.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  10,
-  'Teclados',
-  {'Casio':'CTK-1550'},
-  79.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco) VALUES (
-  11,
-  'Guitarra',
-  {'Jackson':'Dinky Arch Top JS22'},
-  179.99
-);
-INSERT INTO artigos (artigo, instrumento, modelo, Preco, Notas) VALUES (
-  12,
-  'Guitarra',
-  {'Jackson':'Dinky Arch Top JS22'},
-  279.99,
-  ['Conjunto de bolsa e amplificador']
+  aee70c68-6933-4039-9939-4c580958770b
 );
 
-#UPDATES E DELETES
-UPDATE artigos SET notas+=['Promocao de Verao: 50por cento'] where artigo=2;
-UPDATE artigos SET notas+=['Caindo fora de stock'] where artigo=9;
-UPDATE artigos SET notas=['Alguns riscos'] where artigo=4;
-UPDATE teclados Set cores_disponiveis+={'Branco'} where fabricante='Viscount'and modelo= 'Vivace 40 Laminat';
-
-DELETE from artigos where artigo=9;
-DELETE from encomendas where encomenda_id=1;
-DELETE from teclados where fabricante='Casio' and modelo='CTK-1550';
-DELETE from guitarra where fabricante='Fender' and modelo='FA-115';
-
-#INDEX
-
-CREATE INDEX IF NOT EXISTS m_encomendas ON encomendas (modelo);
-CREATE INDEX IF NOT EXISTS m_artigos ON artigos (modelo);
-CREATE INDEX IF NOT EXISTS i_artigos ON artigos (instrumento);
-CREATE INDEX IF NOT EXISTS trastes_in_guitarra ON Guitarra (trastes);
-CREATE INDEX IF NOT EXISTS t_guitarra ON Guitarra (tipo);
-CREATE INDEX IF NOT EXISTS c_teclados ON teclados (cores_disponiveis);
-
-#QUERIES
-1) ver todas as guitarras em stock
-cqlsh:music_store> select * from artigos where instrumento='Guitarra';
-
- artigo | instrumento | modelo                               | notas                                | preco
---------+-------------+--------------------------------------+--------------------------------------+--------
-      5 |    Guitarra | {'Fender': 'Player Stratocaster PF'} |                                 null | 214.99
-     11 |    Guitarra |   {'Jackson': 'Dinky Arch Top JS22'} |                                 null | 179.99
-      1 |    Guitarra |                 {'Fender': 'FA-115'} |                    ['Alguns riscos'] | 359.99
-      2 |    Guitarra |                 {'Fender': 'FA-115'} |   ['Promocao de Verao: 50por cento'] | 559.99
-      4 |    Guitarra | {'Fender': 'Player Stratocaster PF'} |                    ['Alguns riscos'] | 214.99
-      6 |    Guitarra |                   {'Yamaha': 'F310'} |                                 null | 114.99
-     12 |    Guitarra |   {'Jackson': 'Dinky Arch Top JS22'} | ['Conjunto de bolsa e amplificador'] | 279.99
-      3 |    Guitarra |             {'Gear4music': 'Junior'} |                                 null |  34.99
-
-(8 rows)
-
-2)devolver todas as guitarras com 20 trastes
-cqlsh:music_store> select * from guitarra where trastes=22;
-
- fabricante | modelo              | cores_disponiveis   | tipo             | tipo_cordas | trastes
-------------+---------------------+---------------------+------------------+-------------+---------
- Gear4music |              Junior |         {'Natural'} |         Classica |       Nylon |      22
- Gear4music |           Roundback |         {'Natural'} | Electro-Acustica |         Aco |      22
-     Yamaha |                 C40 |        {'Castanha'} |         Classica |       Nylon |      22
-     Yamaha |                F310 |           {'Pinho'} |         Classica |       Nylon |      22
-     Fender | Player Strat MN 3TS | {'3-Tone Sunburst'} |         Eletrica |         Aco |      22
-   BONTEMPI |             24 1310 |           {'Preto'} |         Eletrica |         Aco |      22
-
-(6 rows)
 
 
-3)preco medio das guitarras na loja
-cqlsh:music_store> SELECT avg(preco) FROM artigos;
+#################################################
+TABLE PARTY
 
- system.avg(preco)
--------------------
-            489.99
+
+CREATE TABLE PARTY (pokemon UUID PRIMARY KEY, number_Kanto_pokedex INT, name TEXT, health INT, item TEXT, lvl INT, IV LIST<INT>, EV LIST<INT>);
+
+INSERT INTO PARTY (pokemon, number_Kanto_pokedex, name , health , item , lvl , IV   ) VALUES
+(
+   55e66772-c9b2-48c0-aa8c-d9e5554f8caa ,
+  1,
+  '#1',
+  45,
+  'Leftovers',  
+  15,
+  [11,6,7,1,3,4]
+);
+
+
+#meter em java
+UPDATE PARTY SET level =x where id=y
+
+
+
+cqlsh:pokemon_base> select name, number_Kanto_pokedex, health, item, lvl from party;
+
+ name | number_kanto_pokedex | health | item      | lvl
+------+----------------------+--------+-----------+-----
+   #1 |                    1 |     45 | Leftovers |  15
 
 (1 rows)
 
+###############################################
 
-4)devolver as ultimas 2 encomendas realizadas;
-cqlsh:music_store>select * from encomendas limit 2;
+CREATE INDEX IF NOT EXISTS pokedex_indexfor_type ON pokedex (type);
+CREATE INDEX IF NOT EXISTS pokemon_indexfor_lvl ON pokemon (lvl);
 
- encomenda_id | data                            | cor     | instrumento | modelo                | notas
---------------+---------------------------------+---------+-------------+-----------------------+-------
-            5 | 2019-12-03 20:23:35.386000+0000 |   Preto |     teclado | {'Casio': 'CTK-1550'} |  null
-           10 | 2019-12-03 20:23:35.404000+0000 | Natural |    guitarra |     {'Yamaha': 'C40'} |  null
+CREATE INDEX IF NOT EXISTS pokemon_indexfor_moves ON pokemon (moves);
 
-(2 rows)
-5)saber qual é a marca e tipo do artigo 7
-cqlsh:music_store> select modelo AS fabricante_modelo from artigos where artigo = 7;
+#######################
+UPDATES/DELETES   
+#Change name
+UPDATE party SET name='##1' WHERE pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
+UPDATE pokemon SET name='##1' where id=6e815173-5af4-430e-8e66-94d182fc35ad;
 
- fabricante_modelo
--------------------
- {'Korg': 'EK-50'}
+#Eliminar pokemon (libertar no jogo)
+DELETE from pokemon where id=596bff19-b574-4dce-8af2-fa943373ca20;
+DELETE from PERSONAL_BOX where pokemons=596bff19-b574-4dce-8af2-fa943373ca20;
 
-(1 rows)
-6)saber quais os modelos de guitarras eletro-acusticas existentes
-select * from guitarra where tipo='Electro-Acustica';
-cqlsh:music_store> select * from guitarra where tipo='Electro-Acustica';
+#delete item (remove item)
+DELETE item from pokemon where id=6e815173-5af4-430e-8e66-94d182fc35ad;
+DELETE item from party where pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
 
- fabricante | modelo    | cores_disponiveis | tipo             | tipo_cordas | trastes
-------------+-----------+-------------------+------------------+-------------+---------
- Gear4music | Roundback |       {'Natural'} | Electro-Acustica |         Aco |      22
-     Yamaha |     LS-TA |      {'Castanha'} | Electro-Acustica |       Nylon |      24
+#Change lvl
+UPDATE party SET lvl=18 WHERE pokemon=6e815173-5af4-430e-8e66-94d182fc35ad;
+UPDATE pokemon SET lvl=18 where id=6e815173-5af4-430e-8e66-94d182fc35ad;
 
-(2 rows)
-7)devolver todas as guitarras com pelo menos 20 trastes e menos de 26
-cqlsh:music_store>  select * from guitarra where trastes>=20 and trastes<26 ALLOW FILTERING;
+#Add type in pokedex                                                                                          --done--
+UPDATE pokedex SET type=type+{'Poison'} where Kanto_number=2 and name='Ivysaur';
+UPDATE pokedex SET type=type-{'Poison'} where Kanto_number=2 and name='Ivysaur';
 
- fabricante | modelo                 | cores_disponiveis   | tipo             | tipo_cordas | trastes
-------------+------------------------+---------------------+------------------+-------------+---------
- Gear4music |             Classic V1 |           {'Preto'} |         Classica |         Aco |      24
- Gear4music |                 Junior |         {'Natural'} |         Classica |       Nylon |      22
- Gear4music |              Roundback |         {'Natural'} | Electro-Acustica |         Aco |      22
-         LA |                    B3R |        {'Sunburst'} |         Eletrica |         Aco |      24
-    Jackson |    Dinky Arch Top JS22 |         {'Natural'} |         Eletrica |         Aco |      24
-     Yamaha |                    C40 |        {'Castanha'} |         Classica |       Nylon |      22
-     Yamaha |                   F310 |           {'Pinho'} |         Classica |       Nylon |      22
-     Yamaha |                  LS-TA |        {'Castanha'} | Electro-Acustica |       Nylon |      24
-     Fender |    Player Strat MN 3TS | {'3-Tone Sunburst'} |         Eletrica |         Aco |      22
-     Fender | Player Stratocaster PF | {'4-Tone Sunburst'} |         Eletrica |         Aco |      20
-   BONTEMPI |                24 1310 |           {'Preto'} |         Eletrica |         Aco |      22
+#Update move in pokemon                                                                                       --done--
+UPDATE pokemon SET moves=['Struggle'] where id=0c668bba-e9b9-4837-bd2e-d27d425c2ede  and lvl =15;
 
-(11 rows)
+UPDATE pokemon SET moves+=['Leer'] where id=1e2bf9dc-0818-4fff-9be9-9fc7c40ae9c2 and lvl =12;
 
 
-8)saber que teclados têm a cor 'Pinho'
-cqlsh:music_store> select * from teclados where cores_disponiveis contains 'Pinho';
+#UPDATE base_stats in pokedex                                                                                 --done--
+Update pokedex SET base_stats=[60, 63,63, 80,80, 60] where name='Ivysaur' and Kanto_number=2;  
 
- fabricante | modelo            | cores_disponiveis   | teclas | tipo
-------------+-------------------+---------------------+--------+-------
-    Ahlborn |      Praeludium I |  {'Pinho', 'Preto'} |    111 | Orgao
-   Viscount | Vivace 40 Laminat | {'Branco', 'Pinho'} |     88 | Orgao
 
-(2 rows)
+#DELETE POKEMON                                                                                               --done--
+DELETE FROM pokemon WHERE moves CONTAINS 'Struggle';
 
-9)quais sao os modelos dos teclados da marca Yamaha
-cqlsh:music_store> select modelo from teclados where fabricante = 'Yamaha';
+#caso item seja retirado de pokemon x
+DELETE item from party where id=b7f6265d-090c-469f-bde3-3f3621bdc902;
+DELETE item from pokemon where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
 
- modelo
------------
-  P-121 BK
- PSR-SX700
 
-(2 rows)
 
-10)Todas as encomendas feitas em 2019
-cqlsh:music_store> select * from encomendas where Data < '2020-01-01 00:00:00' and Data > '2019-01-01 00:00:00' ALLOW FILTERING;
+?? DELETES
 
- encomenda_id | data                            | cor             | instrumento | modelo                      | notas
---------------+---------------------------------+-----------------+-------------+-----------------------------+-------
-            5 | 2019-12-03 20:23:35.386000+0000 |           Preto |     teclado |       {'Casio': 'CTK-1550'} |  null
-           10 | 2019-12-03 20:23:35.404000+0000 |         Natural |    guitarra |           {'Yamaha': 'C40'} |  null
-           11 | 2019-12-03 20:43:31.922000+0000 |           Pinho |    guitarra |          {'Yamaha': 'F310'} |  null
-           11 | 2019-12-03 20:23:35.407000+0000 |           Pinho |    guitarra |          {'Yamaha': 'F310'} |  null
-            1 | 2019-12-03 20:23:35.373000+0000 |           Pinho |     teclado | {'Ahlborn': 'Praeludium I'} |  null
-            8 | 2019-12-03 20:23:35.396000+0000 |         Natural |    guitarra |    {'Gear4music': 'Junior'} |  null
-            2 | 2019-12-03 20:23:35.376000+0000 |           Preto |     teclado | {'Ahlborn': 'Praeludium I'} |  null
-            4 | 2019-12-03 20:23:35.382000+0000 |           Preto |     teclado |       {'Roland': 'Go Keys'} |  null
-            7 | 2019-12-03 20:23:35.393000+0000 | 3-Tone Sunburst |    guitarra |          {'Fender': 'K 15'} |  null
-            6 | 2019-12-03 20:23:35.389000+0000 |        Cinzento |     teclado |           {'Kawai': 'K 15'} |  null
-            9 | 2019-12-03 20:23:35.400000+0000 |         Natural |    guitarra | {'Gear4music': 'Roundback'} |  null
-           12 | 2019-12-03 20:43:32.427000+0000 |           Preto |    guitarra |     {'BONTEMPI': '24 1310'} |  null
-           12 | 2019-12-03 20:23:35.410000+0000 |           Preto |    guitarra |     {'BONTEMPI': '24 1310'} |  null
-            3 | 2019-12-03 20:23:35.379000+0000 |        Cinzento |     teclado |    {'Kawai': 'K-200 ATX 3'} |  null
 
-(14 rows)
+
+
+############
+QUERIES
+#caso pokemon x aumentou de nivel:
+deveria usar um counter, mas obrigaria a criar uma nova tabela, uma vez que nao posso misturar counters com non counters
+
+
+#colocar item:
+Update party SET item='Lens' where id=f6265d-090c-469f-bde3-3f3621bdc902;
+Update pokemon SET item='Lens' where id= b7f6265d-090c-469f-bde3-3f3621bdc902;
+
+
+#RETORNAR OS MELHORES 3 (LVL) POKEMONS QUE ESTAO DISPONIVEIS
+select id, lvl from pokemon limit 1; 
+
+#
