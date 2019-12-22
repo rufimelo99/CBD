@@ -1,0 +1,114 @@
+//NMEC: 88889
+#1
+
+MATCH (movies)<-[:DIRECTED]-(directors), 
+(movies)<-[:ACTED_IN]-(actors)
+WHERE directors.name=actors.name 
+RETURN directors.name, movies.title;
+
+#2
+
+MATCH (movies)<-[:ACTED_IN]-(actors) 
+WHERE movies.released>2005 
+RETURN movies.title, actors.name;
+
+#3
+#MATCH (persons)--(movies) 
+#WITH count(*) as n_rel, persons.name as name, movies.title as title 
+#WHERE n_rel>1 and title is not null 
+#RETURN name, title, n_rel;
+
+MATCH (n)-[r]->(m)
+WITH n, m, count(r) as n_rel
+WHERE n_rel >1
+RETURN n, m
+
+#4
+MATCH (Person1)-[:REVIEWED]->(movies)<-[:REVIEWED]-(Person2) 
+WHERE ID(Person1) > ID(Person2)
+RETURN movies.title, Person1.name, Person2.name;
+
+
+#5
+MATCH (actor1)-[:ACTED_IN]->(movie)<-[:ACTED_IN]-(actor2)
+WITH actor1, actor2, count(movie) as n_movies
+WHERE n_movies>1 and ID(actor1)>ID(actor2)
+RETURN actor1.name, actor2.name, n_movies
+
+
+#6
+MATCH (actor)-[:ACTED_IN]->(movie {title:"Apollo 13"})
+WITH date.realtime().year - avg(actor.born) as avg_age
+RETURN avg_age
+
+note: need to check method in order to round
+
+#7
+
+MATCH (actor)-[:ACTED_IN]->(movie)
+WITH date.realtime().year - avg(actor.born) as avg_age, movie
+RETURN avg_age, movie.title
+ORDER BY avg_age DESC
+LIMIT 10
+
+#8
+MATCH (actor)-[:ACTED_IN]->(movie)
+WITH movie.released - avg(actor.born) as avg_age, movie as filme
+ORDER BY avg_age ASC
+LIMIT 1
+
+MATCH (actor)-[:ACTED_IN]->(filme)
+RETURN filme, actor
+ORDER BY avg_age
+
+#9
+MATCH (JC:Person { name: 'John Cusack' }),(DM:Person { name: 'Demi Moore' }), p = shortestPath((JC)-[*]-(DM))
+RETURN p
+
+#10
+
+MATCH (KR:Person { name: 'Keanu Reeves' }),(TC:Person { name: 'Tom Cruise' }), p = shortestPath((KR)-[*]-(TC))
+UNWIND nodes(p) as n
+RETURN COUNT(DISTINCT n);
+
+#11
+MATCH path=shortestPath(
+  (P1:Person)-[*]-(P2:Person)
+)
+WHERE P1.name CONTAINS 'Jim' and P2.name CONTAINS 'Kevin'
+UNWIND nodes(path) as rel
+WITH path, COUNT(DISTINCT rel) as n_rel
+RETURN n_rel
+ORDER BY n_rel ASC
+LIMIT 1
+
+#12 ????
+MATCH path=shortestPath(
+  (P1:Person)-[*]-(P2:Person)
+)
+WHERE P1.name = 'Jim Cash' and P1 <> P2
+UNWIND nodes(path) as rel
+WITH P2, count(rel) as n_rel
+
+
+WHERE n_rel = 2
+RETURN P2, n_rel
+
+#13 ???? suponho que nao possa usar o shortestPath
+MATCH (P1:Person {name : 'Kevin Bacon'}), (P2:Person)
+WITH P1, P2
+MATCH p=(P1)-[*]-(P2)
+RETURN p, length(p) ORDER BY length(p) DESC LIMIT 1
+
+
+#14
+MATCH (P1:Person), (P2:Person)
+WITH P1, P2
+WHERE P1 <> P2
+MATCH p=(P1)-[*]-(P2)
+RETURN p, length(p) ORDER BY length(p) DESC LIMIT 1
+
+#15
+
+
+#16

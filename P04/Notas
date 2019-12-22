@@ -1,0 +1,26 @@
+####installation
+https://www.youtube.com/watch?v=M2JSvN1Afw8
+wget -O - https://debian.neo4j.org/neotechnology.gpg.key | sudo apt-key add - 
+
+echo 'deb http://debian.neo4j.org/repo stable/' >/tmp/neo4j.list
+
+sudo mv /tmp/neo4j.list /etc/apt/sources.list.d
+
+sudo apt-get update
+
+sudo apt-get install neo4j
+
+sudo service neo4j restart
+
+
+
+#open browser:
+localhost:7474
+
+
+
+user: neo4j
+password: 12345
+
+localhost:7687
+
